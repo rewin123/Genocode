@@ -11,6 +11,7 @@ class Layer(object):
     def GetOutput(self): #Возращает вычисленный выход слоя
         return self.output
 
+
 class Input(Layer):
     def __init__(self, output_size):
         super().__init__(output_size)
@@ -35,9 +36,36 @@ class Dense(Layer):
         in_arr = self.inp.GetOutput()
         self.output = np.dot(in_arr, self.ws)
 
+class Feedforward(Layer):
+    def __init__(self, inp, output_size):
+        self.inp = inp
+        return super().__init__(output_size)
+
+class AddConst(Feedforward):
+    def __init__(self, inp, output_size):
+        self.ws = np.zeros(output_size)
+        return super().__init__(inp, output_size)
+    def Prepare(self):
+        self.output = self.ws + self.inp.GetOutput()
+
+class MultiplyConst(Feedforward):
+    def __init__(self, inp, output_size):
+        self.ws = np.zeros(output_size)
+        return super().__init__(inp, output_size)
+    def Prepare(self):
+        self.output = self.ws * self.inp.GetOutput()
+
+class Relu(Feedforward):
+    def __init__(self, inp):
+        return super().__init__(inp, inp.output_size)
+    
+    def Prepare(self):
+        self.output = (self.inp.GetOutput() > 0) * 1
+
 inp = Input(10)
 d1 = Dense(inp, 11)
 d2 = Dense(d1, 12)
+relu = Relu(d2)
 
 print("inp out: " + str(inp.output_size))
 print("d1 out: " + str(d1.output_size))
@@ -60,3 +88,6 @@ d1.AddNoise()
 d1.Prepare()
 print(d1.GetOutput())
 
+r = Relu(d1)
+r.Prepare()
+print(r.GetOutput())
