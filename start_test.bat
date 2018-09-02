@@ -1,0 +1,1 @@
+python C:\Users\rewin\OneDrive\Documents\GitHub\miniaicups\madcars\Runners\localrunner.py -f "python main.py"
