@@ -15,7 +15,7 @@ import numpy as np
 from dense import Input,Dense,Relu
 from mechanic.strategy import Client
 import numpy as np
-
+import pickle
 
 class Cell(Client):
     def __init__(self):
@@ -88,5 +88,15 @@ class Cell(Client):
         #print(choises[result] + ':' + str(output))
         return  {'command': choises[result] }
 
-        
 
+
+def SaveTest():
+    c = Cell()
+    with open('c.pkl','wb') as output:
+        pickle.dump(c,output,pickle.HIGHEST_PROTOCOL)
+
+    del c
+
+    with open('c.pkl', 'rb') as input:
+        company1 = pickle.load(input)
+        print(company1.input_layer.GetOutput())

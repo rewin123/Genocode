@@ -3,7 +3,6 @@ from cell import Cell
 import random
 from mechanic.game import Game
 from asyncio import events
-import pickle
 
 def Match(p1,p2):
     game = Game([p1, p1], games, extended_save=False)
@@ -59,8 +58,4 @@ for g in range(0,gen_steps):
     for i in range(bottle_size,pool_size):
         pos = random.randint(0,i - 1)
         genepool.append(genepool[pos].Mutate())
-
-    #Сохраняем наилучшую особь
-    with open(str(g) + "_gen.pkl","wb") as output:
-        pickle.dump(genepool[0],output,pickle.HIGHEST_PROTOCOL)
     a = 1
