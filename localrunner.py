@@ -10,6 +10,7 @@ from mechanic.game import Game
 from mechanic.strategy import KeyboardClient, FileClient, DenseClient
 
 from dense import Input, Dense, Relu
+import pickle
 
 window = pyglet.window.Window(1200, 800, vsync=False)
 draw_options = pymunk.pyglet_util.DrawOptions()
@@ -27,8 +28,8 @@ parser.add_argument('-s', '--sp', type=str, nargs='?',
 parser.add_argument('--spl', type=str, nargs='?', help='Path to log for second player')
 
 
-maps = ['PillMap', 'PillHubbleMap', 'PillHillMap', 'PillCarcassMap', 'IslandMap', 'IslandHoleMap']
-cars = ['Buggy', 'Bus', 'SquareWheelsBuggy']
+maps = ['PillMap']
+cars = ['Buggy']
 games = [','.join(t) for t in product(maps, cars)]
 
 
@@ -39,26 +40,13 @@ args = parser.parse_args()
 first_player = args.fp
 second_player = args.sp
 
-if args.fp == 'keyboard':
-    fc = KeyboardClient(window)
-else:
-    fc = FileClient(args.fp.split(), args.fpl)
+with open('1_gen.pkl', 'rb') as output:
+    p1 = pickle.load(output)
 
-#if args.sp == 'keyboard':
-#    sc = KeyboardClient(window)
-#else:
-#    sc = FileClient(args.sp.split(), args.spl)
-inp_layer = Input(20)
-layers = []
-d = Dense(inp_layer,40)
-d.AddNoise()
-layers.append(d)
-d = Dense(d,3)
-d.AddNoise()
-layers.append(d)
-sc = DenseClient(layers, inp_layer)
+with open('1_gen.pkl', 'rb') as output:
+    p2 = pickle.load(output)
 
-game = Game([fc, sc], args.matches, extended_save=False)
+game = Game([p1, p2], args.matches, extended_save=False)
 
 loop = events.new_event_loop()
 events.set_event_loop(loop)

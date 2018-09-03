@@ -27,7 +27,7 @@ games = [','.join(t) for t in product(maps, cars)]
 genepool = []
 pool_size = 100
 bottle_size = 50
-match_count = 1
+match_count = 2
 gen_steps = 10
 
 
@@ -44,6 +44,10 @@ for g in range(0,gen_steps):
         index += 1
         for m in range(c.matches, match_count):
             enemy = random.choice(genepool)
+            tryes = 0
+            while(enemy.matches >= match_count and tryes < 10):
+                enemy = random.choice(genepool)
+                tryes += 1
             result = Match(c, enemy)
             c.matches += 1
             enemy.matches += 1
