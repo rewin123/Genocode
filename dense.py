@@ -62,32 +62,33 @@ class Relu(Feedforward):
     def Prepare(self):
         self.output = (self.inp.GetOutput() > 0) * 1
 
-inp = Input(10)
-d1 = Dense(inp, 11)
-d2 = Dense(d1, 12)
-relu = Relu(d2)
+def Test():
+    inp = Input(10)
+    d1 = Dense(inp, 11)
+    d2 = Dense(d1, 12)
+    relu = Relu(d2)
 
-print("inp out: " + str(inp.output_size))
-print("d1 out: " + str(d1.output_size))
-print("d2 out: " + str(d2.output_size))
+    print("inp out: " + str(inp.output_size))
+    print("d1 out: " + str(d1.output_size))
+    print("d2 out: " + str(d2.output_size))
 
-print("d1 size: " + str(d1.size))
-print("d2 size: " + str(d2.size))
+    print("d1 size: " + str(d1.size))
+    print("d2 size: " + str(d2.size))
 
-d1.Prepare()
-print(d1.GetOutput())
+    d1.Prepare()
+    print(d1.GetOutput())
 
-inp.SetOutput(np.ones(inp.output_size))
-print(inp.GetOutput())
+    inp.SetOutput(np.ones(inp.output_size))
+    print(inp.GetOutput())
 
-d1.Prepare()
-print(d1.GetOutput())
+    d1.Prepare()
+    print(d1.GetOutput())
 
-d1.AddNoise()
+    d1.AddNoise()
 
-d1.Prepare()
-print(d1.GetOutput())
+    d1.Prepare()
+    print(d1.GetOutput())
 
-r = Relu(d1)
-r.Prepare()
-print(r.GetOutput())
+    r = Relu(d1)
+    r.Prepare()
+    print(r.GetOutput())

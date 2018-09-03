@@ -7,7 +7,9 @@ import argparse
 from asyncio import events
 
 from mechanic.game import Game
-from mechanic.strategy import KeyboardClient, FileClient
+from mechanic.strategy import KeyboardClient, FileClient, DenseClient
+
+from dense import Input, Dense, Relu
 
 window = pyglet.window.Window(1200, 800, vsync=False)
 draw_options = pymunk.pyglet_util.DrawOptions()
@@ -42,10 +44,19 @@ if args.fp == 'keyboard':
 else:
     fc = FileClient(args.fp.split(), args.fpl)
 
-if args.sp == 'keyboard':
-    sc = KeyboardClient(window)
-else:
-    sc = FileClient(args.sp.split(), args.spl)
+#if args.sp == 'keyboard':
+#    sc = KeyboardClient(window)
+#else:
+#    sc = FileClient(args.sp.split(), args.spl)
+inp_layer = Input(20)
+layers = []
+d = Dense(inp_layer,40)
+d.AddNoise()
+layers.append(d)
+d = Dense(d,3)
+d.AddNoise()
+layers.append(d)
+sc = DenseClient(layers, inp_layer)
 
 game = Game([fc, sc], args.matches, extended_save=False)
 

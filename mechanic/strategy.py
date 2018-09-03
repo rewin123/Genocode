@@ -10,7 +10,7 @@ import asyncio
 from subprocess import Popen, PIPE
 
 from mechanic.constants import MAX_EXECUTION_TIME, REQUEST_MAX_TIME
-
+import numpy as np
 
 class Client(object):
     def get_command(self):
@@ -29,9 +29,54 @@ class Client(object):
         return random.randint(11000, 12000)
 
 class DenseClient(Client):
-	def __init__(self, *args, **kwargs):
+    def __init__(self, layers, input_layer):
+        self.layers = layers
+        self.input_layer = input_layer
+        self.inp = np.zeros(20)
 
-		return super().__init__(*args, **kwargs)
+    def send_message(self, t, d):
+        if t != 'new_match':
+            #print('my car ' + str(d['my_car']))
+            #print('enemy car ' + str(d['enemy_car']))
+            self.my_car = d['my_car']
+            self.enemy_car = d['enemy_car']
+            #print(type(d))
+    def PrepareInput(self): #Подготавливает вход для нейронной сети
+        
+        self.inp[0] = self.my_car[0][0]
+        self.inp[1] = self.my_car[0][1]
+        self.inp[2] = self.my_car[1]
+        self.inp[3] = self.my_car[2]
+        self.inp[4] = self.my_car[3][0]
+        self.inp[5] = self.my_car[3][1]
+        self.inp[6] = self.my_car[3][2]
+        self.inp[7] = self.my_car[4][0]
+        self.inp[8] = self.my_car[4][1]
+        self.inp[9] = self.my_car[4][2]
+
+        self.inp[10] = self.enemy_car[0][0]
+        self.inp[11] = self.enemy_car[0][1]
+        self.inp[12] = self.enemy_car[1]
+        self.inp[13] = self.enemy_car[2]
+        self.inp[14] = self.enemy_car[3][0]
+        self.inp[15] = self.enemy_car[3][1]
+        self.inp[16] = self.enemy_car[3][2]
+        self.inp[17] = self.enemy_car[4][0]
+        self.inp[18] = self.enemy_car[4][1]
+        self.inp[19] = self.enemy_car[4][2]
+
+    @asyncio.coroutine
+    def get_command(self):
+        self.PrepareInput()
+        self.input_layer.SetOutput(self.inp)
+        for l in self.layers:
+            l.Prepare()
+        output = self.layers[- 1].GetOutput()
+        result = np.argmax(output)
+        choises = ['left','right','stop']
+        #print(choises[result] + ':' + str(output))
+        return  {'command': choises[result] }
+        
 
 
 class KeyboardClient(Client):
