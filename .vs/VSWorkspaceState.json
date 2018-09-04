@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\mechanic"
+    "\\mechanic",
+    "\\mechanic\\game_objects"
   ],
-  "SelectedNode": "\\genepool.py",
+  "SelectedNode": "\\localrunner.py",
   "PreviewInSolutionExplorer": false
 }

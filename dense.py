@@ -29,7 +29,7 @@ class Dense(Layer):
         self.ws = np.zeros((self.input_size,self.output_size))
         super().__init__(output_size)
     def AddNoise(self):
-        noise = np.random.normal(size=self.ws.shape)
+        noise = np.random.normal(scale=0.1, size=self.ws.shape)
         self.ws = self.ws+noise
         
     def Prepare(self):

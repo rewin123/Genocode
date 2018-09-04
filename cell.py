@@ -19,14 +19,14 @@ import pickle
 
 class Cell(Client):
     def __init__(self):
-        self.inp = np.zeros(20)
+        self.inp = np.zeros(21)
         self.mass = 0 #êîë-àî ðåéòèíãà
         self.matches = 0 #êîë-âî ñûãðàííûõ ìàò÷åé
 
         #Íàñðîéêà íåéðîííîé ñåòè
         self.layers = []
-        self.input_layer = Input(20)
-        l = Dense(self.input_layer, 40)
+        self.input_layer = Input(21)
+        l = Dense(self.input_layer, 42)
         l.AddNoise()
         self.layers.append(l)
         l = Relu(l)
@@ -51,6 +51,7 @@ class Cell(Client):
             #print('enemy car ' + str(d['enemy_car']))
             self.my_car = d['my_car']
             self.enemy_car = d['enemy_car']
+            self.deadline = d['deadline_position']
             #print(type(d))
     def PrepareInput(self): #Ïîäãîòàâëèâàåò âõîä äëÿ íåéðîííîé ñåòè
         
@@ -75,6 +76,7 @@ class Cell(Client):
         self.inp[17] = self.enemy_car[4][0]
         self.inp[18] = self.enemy_car[4][1]
         self.inp[19] = self.enemy_car[4][2]
+        self.inp[20] = self.deadline
 
     @asyncio.coroutine
     def get_command(self):

@@ -33,14 +33,14 @@ gen_steps = 10
 
 for i in range(0,pool_size):
     genepool.append(Cell())
-
-for g in range(0,gen_steps):
+g = 0
+while True:
     for c in genepool:
         c.mass = 0
         c.matches = 0
     index = 0
     for c in genepool:
-        print(index)
+        print(str(g) + ":" + str(index))
         index += 1
         for m in range(c.matches, match_count):
             enemy = random.choice(genepool)
@@ -48,16 +48,26 @@ for g in range(0,gen_steps):
             while(enemy.matches >= match_count and tryes < 10):
                 enemy = random.choice(genepool)
                 tryes += 1
-            result = Match(c, enemy)
             c.matches += 1
             enemy.matches += 1
-            if result == 1:
-                c.mass += 1
-                enemy.mass -= 1
+            if random.randint(0,1) == 0:
+                result = Match(c, enemy)
+                if result == 1:
+                    c.mass += 1
+                    enemy.mass -= 1
+                else:
+                    if(result == 2):
+                        c.mass -= 1
+                        enemy.mass += 1
             else:
-                if(result == 2):
+                result = Match(enemy, c)
+                if result == 1:
                     c.mass -= 1
                     enemy.mass += 1
+                else:
+                    if(result == 2):
+                        c.mass += 1
+                        enemy.mass -= 1
     genepool.sort(key= lambda x: -x.mass / x.matches)
     genepool = genepool[:bottle_size]
     for i in range(bottle_size,pool_size):
@@ -67,4 +77,4 @@ for g in range(0,gen_steps):
     #Сохраняем наилучшую особь
     with open(str(g) + "_gen.pkl","wb") as output:
         pickle.dump(genepool[0],output,pickle.HIGHEST_PROTOCOL)
-    a = 1
+    g += 1
