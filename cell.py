@@ -28,10 +28,16 @@ class Cell(Client):
         self.input_layer = Input(21)
         l = Dense(self.input_layer, 42)
         l.AddNoise()
+        l.AddNoise()
+        l.AddNoise()
+        l.AddNoise()
         self.layers.append(l)
         l = Relu(l)
         self.layers.append(l)
         l = Dense(l,3)
+        l.AddNoise()
+        l.AddNoise()
+        l.AddNoise()
         l.AddNoise()
         self.layers.append(l)
         self.output = l
@@ -90,7 +96,12 @@ class Cell(Client):
         #print(choises[result] + ':' + str(output))
         return  {'command': choises[result] }
 
-
+def Child(c1,c2):
+    k = random.random()
+    c = Cell()
+    c.layers[0].ws = c.layers[0].ws * 0.01 + c1.layers[0].ws * k + c2.layers[0].ws * (1 - k)
+    c.layers[2].ws = c.layers[2].ws * 0.01 + c1.layers[2].ws * k + c2.layers[2].ws * (1 - k)
+    return c
 
 def SaveTest():
     c = Cell()
@@ -102,3 +113,9 @@ def SaveTest():
     with open('c.pkl', 'rb') as input:
         company1 = pickle.load(input)
         print(company1.input_layer.GetOutput())
+
+def TestChild():
+    c1 = Cell()
+    c2 = Cell()
+
+    c3 = Child(c1,c2)

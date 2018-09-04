@@ -1,5 +1,6 @@
 from itertools import product
 from cell import Cell
+import cell
 import random
 from mechanic.game import Game
 from asyncio import events
@@ -25,9 +26,9 @@ cars = ['Buggy']
 games = [','.join(t) for t in product(maps, cars)]
 
 genepool = []
-pool_size = 100
-bottle_size = 50
-match_count = 2
+pool_size = 1000
+bottle_size = 500
+match_count = 3
 gen_steps = 10
 
 
@@ -72,7 +73,8 @@ while True:
     genepool = genepool[:bottle_size]
     for i in range(bottle_size,pool_size):
         pos = random.randint(0,i - 1)
-        genepool.append(genepool[pos].Mutate())
+        pos2 = random.randint(0,i - 1)
+        genepool.append(cell.Child(genepool[pos], genepool[pos2]))
 
     #Сохраняем наилучшую особь
     with open(str(g) + "_gen.pkl","wb") as output:

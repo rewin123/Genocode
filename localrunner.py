@@ -40,10 +40,10 @@ args = parser.parse_args()
 first_player = args.fp
 second_player = args.sp
 
-with open('74_gen.pkl', 'rb') as output:
+with open('2_gen.pkl', 'rb') as output:
     p1 = pickle.load(output)
 
-with open('74_gen.pkl', 'rb') as output:
+with open('2_gen.pkl', 'rb') as output:
     p2 = pickle.load(output)
 
 game = Game([p1, p2], args.matches, extended_save=False)
