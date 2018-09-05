@@ -32,6 +32,9 @@ match_count = 3
 gen_steps = 10
 
 
+
+
+
 for i in range(0,pool_size):
     genepool.append(Cell())
 g = 0
